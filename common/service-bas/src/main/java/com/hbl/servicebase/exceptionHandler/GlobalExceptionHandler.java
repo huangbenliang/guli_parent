@@ -2,12 +2,14 @@ package com.hbl.servicebase.exceptionHandler;
 
 
 import com.hbl.commonutils.R;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 //统一处理controller抛出的异常
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     //指定出现什么异常会执行这个方法
@@ -16,6 +18,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public R error(Exception e){
         e.printStackTrace();
+        log.error(e.getMessage());
         return R.error().message("执行了全局异常处理。。。");
     }
 
