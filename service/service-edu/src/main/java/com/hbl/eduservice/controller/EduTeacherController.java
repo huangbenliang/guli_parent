@@ -4,6 +4,7 @@ package com.hbl.eduservice.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hbl.commonutils.R;
 import com.hbl.eduservice.entity.EduTeacher;
+import com.hbl.eduservice.entity.vo.TeacherQuery;
 import com.hbl.eduservice.service.EduTeacherService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -54,6 +55,18 @@ public class EduTeacherController {
 	                  @ApiParam(name = "limit", value = "每页记录数", required = true) @PathVariable Long limit) {
 		Page<EduTeacher> pageParam=new Page<>(page,limit);
 		eduTeacherService.page(pageParam, null);
+		List<EduTeacher> records = pageParam.getRecords();
+		long total = pageParam.getTotal();
+		return R.ok().data("total",total).data("rows",records);
+	}
+
+	@ApiOperation("多条件查询讲师带分页")
+	@PostMapping("/pageTeacherCondition/{page}/{limit}")
+	public R pageTeacherCondition(@ApiParam(name = "page",value = "当前页码",required = true)@PathVariable Long page,
+	                              @ApiParam(name = "limit",value = "每页记录数",required = false,defaultValue = "5")@PathVariable Long limit,
+	                              @RequestBody(required = false)TeacherQuery teacherQuery){
+		Page<EduTeacher> pageParam=new Page<>(page, limit);
+		eduTeacherService.pageQuery(pageParam, teacherQuery);
 		List<EduTeacher> records = pageParam.getRecords();
 		long total = pageParam.getTotal();
 		return R.ok().data("total",total).data("rows",records);
