@@ -1,6 +1,7 @@
 package com.hbl.eduservice.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hbl.commonutils.R;
 import com.hbl.eduservice.entity.EduTeacher;
 import com.hbl.eduservice.service.EduTeacherService;
@@ -32,7 +33,7 @@ public class EduTeacherController {
 	@ApiOperation("所有讲师列表")
 	public R list() {
 		List<EduTeacher> list = eduTeacherService.list(null);
-		return R.ok().data("items",list);
+		return R.ok().data("items", list);
 	}
 
 	//逻辑删除讲师
@@ -47,6 +48,15 @@ public class EduTeacherController {
 		}
 	}
 
-
+	@ApiOperation("分页讲师列表")
+	@GetMapping("/pageList/{page}/{limit}")
+	public R pageList(@ApiParam(name = "page", value = "当前页码", required = true) @PathVariable Long page,
+	                  @ApiParam(name = "limit", value = "每页记录数", required = true) @PathVariable Long limit) {
+		Page<EduTeacher> pageParam=new Page<>(page,limit);
+		eduTeacherService.page(pageParam, null);
+		List<EduTeacher> records = pageParam.getRecords();
+		long total = pageParam.getTotal();
+		return R.ok().data("total",total).data("rows",records);
+	}
 }
 
