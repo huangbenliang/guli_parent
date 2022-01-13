@@ -1,6 +1,7 @@
 package com.hbl.eduservice.controller;
 
 
+import com.hbl.commonutils.R;
 import com.hbl.eduservice.entity.EduTeacher;
 import com.hbl.eduservice.service.EduTeacherService;
 import io.swagger.annotations.ApiOperation;
@@ -29,15 +30,21 @@ public class EduTeacherController {
 	//查询讲师表所有数据
 	@GetMapping("/findAll")
 	@ApiOperation("所有讲师列表")
-	public List<EduTeacher> list() {
-		return eduTeacherService.list(null);
+	public R list() {
+		List<EduTeacher> list = eduTeacherService.list(null);
+		return R.ok().data("items",list);
 	}
 
 	//逻辑删除讲师
 	@ApiOperation(value = "根据ID删除讲师")
 	@DeleteMapping("/deleteTeacherById/{id}")
-	public boolean deleteTeacherById(@ApiParam(name = "id", value = "讲师Id", required = true) @PathVariable String id) {
-		return eduTeacherService.removeById(id);
+	public R deleteTeacherById(@ApiParam(name = "id", value = "讲师Id", required = true) @PathVariable String id) {
+		boolean flag = eduTeacherService.removeById(id);
+		if (flag) {
+			return R.ok();
+		} else {
+			return R.error();
+		}
 	}
 
 
