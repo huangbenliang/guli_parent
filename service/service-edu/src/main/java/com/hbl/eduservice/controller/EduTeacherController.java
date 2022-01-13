@@ -4,9 +4,7 @@ package com.hbl.eduservice.controller;
 import com.hbl.eduservice.entity.EduTeacher;
 import com.hbl.eduservice.service.EduTeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +17,7 @@ import java.util.List;
  * @since 2022-01-13
  */
 @RestController
+@CrossOrigin //解决跨域问题
 @RequestMapping("/eduservice/edu-teacher")
 public class EduTeacherController {
 	@Autowired
@@ -29,6 +28,12 @@ public class EduTeacherController {
 	public List<EduTeacher> list(){
 		return eduTeacherService.list(null);
 	}
+	//逻辑删除讲师
+	@DeleteMapping("/deleteTeacherById/{id}")
+	public boolean deleteTeacherById(@PathVariable String id){
+		return eduTeacherService.removeById(id);
+	}
+
 
 }
 
