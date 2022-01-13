@@ -6,6 +6,7 @@ import com.hbl.commonutils.R;
 import com.hbl.eduservice.entity.EduTeacher;
 import com.hbl.eduservice.entity.vo.TeacherQuery;
 import com.hbl.eduservice.service.EduTeacherService;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,23 +54,52 @@ public class EduTeacherController {
 	@GetMapping("/pageList/{page}/{limit}")
 	public R pageList(@ApiParam(name = "page", value = "当前页码", required = true) @PathVariable Long page,
 	                  @ApiParam(name = "limit", value = "每页记录数", required = true) @PathVariable Long limit) {
-		Page<EduTeacher> pageParam=new Page<>(page,limit);
+		Page<EduTeacher> pageParam = new Page<>(page, limit);
 		eduTeacherService.page(pageParam, null);
 		List<EduTeacher> records = pageParam.getRecords();
 		long total = pageParam.getTotal();
-		return R.ok().data("total",total).data("rows",records);
+		return R.ok().data("total", total).data("rows", records);
 	}
 
 	@ApiOperation("多条件查询讲师带分页")
 	@PostMapping("/pageTeacherCondition/{page}/{limit}")
-	public R pageTeacherCondition(@ApiParam(name = "page",value = "当前页码",required = true)@PathVariable Long page,
-	                              @ApiParam(name = "limit",value = "每页记录数",required = false,defaultValue = "5")@PathVariable Long limit,
-	                              @RequestBody(required = false)TeacherQuery teacherQuery){
-		Page<EduTeacher> pageParam=new Page<>(page, limit);
+	public R pageTeacherCondition(@ApiParam(name = "page", value = "当前页码", required = true) @PathVariable Long page,
+	                              @ApiParam(name = "limit", value = "每页记录数", required = false, defaultValue = "5") @PathVariable Long limit,
+	                              @RequestBody(required = false) TeacherQuery teacherQuery) {
+		Page<EduTeacher> pageParam = new Page<>(page, limit);
 		eduTeacherService.pageQuery(pageParam, teacherQuery);
 		List<EduTeacher> records = pageParam.getRecords();
 		long total = pageParam.getTotal();
-		return R.ok().data("total",total).data("rows",records);
+		return R.ok().data("total", total).data("rows", records);
+	}
+
+	@ApiModelProperty("新增讲师")
+	@PostMapping("/save")
+	public R save(@RequestBody EduTeacher eduTeacher) {
+		boolean flag = eduTeacherService.save(eduTeacher);
+		if (flag) {
+			return R.ok();
+		} else {
+			return R.error();
+		}
+	}
+
+	@ApiModelProperty(value = "根据id查询教师")
+	@GetMapping("/getById/{id}")
+	public R getById(@PathVariable String id) {
+		EduTeacher teacher = eduTeacherService.getById(id);
+		return R.ok().data("item",teacher);
+	}
+
+	@ApiModelProperty(value = "修改讲师")
+	@PostMapping("/updateById")
+	public R updateById(@RequestBody EduTeacher eduTeacher) {
+		boolean flag = eduTeacherService.updateById(eduTeacher);
+		if (flag) {
+			return R.ok();
+		} else {
+			return R.error();
+		}
 	}
 }
 
