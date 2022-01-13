@@ -1,5 +1,6 @@
 package com.hbl.eduservice.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -28,25 +29,24 @@ public class EduTeacherServiceImpl extends ServiceImpl<EduTeacherMapper, EduTeac
 		//构建条件
 		QueryWrapper<EduTeacher> wrapper = new QueryWrapper<>();
 
-		Optional.ofNullable(teacherQuery).filter(e -> !StringUtils.isEmpty(e.getName())).map(TeacherQuery::getName)
-				.ifPresent(name -> wrapper.like("name", name));
+		Optional.ofNullable(teacherQuery.getName()).filter(e -> !StrUtil.isBlank(e)).ifPresent(name -> wrapper.like("name", name));
 
 		Integer level = teacherQuery.getLevel();
 		String begin = teacherQuery.getBegin();
 		String end = teacherQuery.getEnd();
 
 		//判断是否传入教师头衔
-		if (!StringUtils.isEmpty(level)){
+		if (!StringUtils.isEmpty(level)) {
 			//构造条件
-			wrapper.eq("level",level);
+			wrapper.eq("level", level);
 		}
-		if (!StringUtils.isEmpty(begin)){
+		if (!StringUtils.isEmpty(begin)) {
 			//构造条件
-			wrapper.ge("gmt_create",begin);//ge：大于等于
+			wrapper.ge("gmt_create", begin);//ge：大于等于
 		}
-		if (!StringUtils.isEmpty(begin)){
+		if (!StringUtils.isEmpty(begin)) {
 			//构造条件
-			wrapper.le("gmt_modified",end);//le:小于等于
+			wrapper.le("gmt_modified", end);//le:小于等于
 		}
 
 		baseMapper.selectPage(pageParam, wrapper);
