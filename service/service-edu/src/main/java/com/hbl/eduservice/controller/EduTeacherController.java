@@ -6,9 +6,7 @@ import com.hbl.commonutils.R;
 import com.hbl.eduservice.entity.EduTeacher;
 import com.hbl.eduservice.entity.vo.TeacherQuery;
 import com.hbl.eduservice.service.EduTeacherService;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +38,7 @@ public class EduTeacherController {
 
 	//逻辑删除讲师
 	@ApiOperation(value = "根据ID删除讲师")
-	@DeleteMapping("/deleteTeacherById/{id}")
+	@DeleteMapping("{id}")
 	public R deleteTeacherById(@ApiParam(name = "id", value = "讲师Id", required = true) @PathVariable String id) {
 		boolean flag = eduTeacherService.removeById(id);
 		if (flag) {
@@ -86,6 +84,7 @@ public class EduTeacherController {
 
 	@ApiModelProperty(value = "根据id查询教师")
 	@GetMapping("/getById/{id}")
+	@ApiResponses({@ApiResponse(code = 20000,message = "item",response = EduTeacher.class)})
 	public R getById(@PathVariable String id) {
 		EduTeacher teacher = eduTeacherService.getById(id);
 		return R.ok().data("item",teacher);
