@@ -2,6 +2,7 @@ package com.hbl.eduservice.service;
 
 import com.hbl.eduservice.entity.EduSubject;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface EduSubjectService extends IService<EduSubject> {
 
+	void saveSubject(MultipartFile file, EduSubjectService eduSubjectService);
 }
