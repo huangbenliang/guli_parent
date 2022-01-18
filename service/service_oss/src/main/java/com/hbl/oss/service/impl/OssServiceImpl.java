@@ -1,5 +1,7 @@
 package com.hbl.oss.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.hbl.oss.service.OssService;
@@ -34,6 +36,8 @@ public class OssServiceImpl implements OssService {
 
             //获取文件名称
             String fileName = file.getOriginalFilename();
+            String format = DateUtil.format(DateUtil.date(), "yyyy/MM/dd");
+            fileName= format+"/"+IdUtil.simpleUUID() +fileName;
 
 
             //调用oss实例中的方法实现上传
